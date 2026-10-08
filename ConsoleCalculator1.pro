@@ -13,6 +13,7 @@ TEMPLATE = app
 
 SOURCES += \
         calculator.cpp \
+        fraction.cpp \
         main.cpp
 
 # Default rules for deployment.
@@ -21,4 +22,5 @@ else: unix:!android: target.path = /opt/$${TARGET}/bin
 !isEmpty(target.path): INSTALLS += target
 
 HEADERS += \
-    calculator.h
+    calculator.h \
+    fraction.h
