@@ -1,6 +1,7 @@
 #include <QCoreApplication>
 #include <QTextStream>
 #include <QStringList>
+#include <QFile>
 #include "calculator.h"
     // Функция для вывода справки по командам
     void printHelp(QTextStream& out) {
@@ -22,6 +23,14 @@ int main(int argc, char* argv[]) {
     // Создаём калькулятор (родитель не нужен - живёт до конца программы)
     Calculator calc;
     // СОЕДИНЕНИЯ: связываем сигналы калькулятора с лямбда-обработчиками
+    QFile historyFile("history.txt");
+    historyFile.open(QIODevice::WriteOnly | QIODevice::Append);
+    QTextStream historyStream(&historyFile);
+    QObject::connect(&calc, &Calculator::resultReady,
+                     [&historyStream](double result) {
+                         historyStream << "Result: " << result << "\n";
+                         historyStream.flush();
+                     });
     // 1. При успешном вычислении - выводим результат
     QObject::connect(&calc, &Calculator::resultReady,
                      [&out](double result) {
